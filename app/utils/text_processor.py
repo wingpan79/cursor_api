@@ -1,4 +1,6 @@
-def encode_description(description: str | None) -> str | None:
+from typing import Optional
+
+def encode_description(description: str ) -> Optional[str]:
     """
     Encode description text to UTF-8 and decode back to ensure proper encoding
     
@@ -17,3 +19,4 @@ def encode_description(description: str | None) -> str | None:
     except UnicodeError:
         # If there's an encoding error, try to handle common cases
         return description.encode('utf-8', errors='replace').decode('utf-8') 
+        

@@ -13,6 +13,9 @@ class CategoryCreate(CategoryBase):
 # Add this new schema for bulk updates
 class CategoryBulkUpdate(CategoryBase):
     id: int
+    name: Optional[str] = None
+    description: Optional[str] = None
+    status: Optional[str] = None
 
 class Category(CategoryBase):
     id: int

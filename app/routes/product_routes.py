@@ -65,7 +65,7 @@ def read_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
     # Convert result to dictionary format
     products = products.mappings().all()
     # Debug print
-    print(products)
+    #print(products)
     return products
 
 # Endpoint to get a single product by ID

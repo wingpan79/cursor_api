@@ -14,6 +14,7 @@ app = FastAPI()
 # Add API Logger middleware
 app.add_middleware(APILoggerMiddleware)
 
+
 # Include routers
 app.include_router(category_routes.router, tags=["categories"])
 app.include_router(product_routes.router, tags=["products"])

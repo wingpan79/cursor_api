@@ -10,10 +10,11 @@ router = APIRouter()
 
 @router.post("/categories/", response_model=CategorySchema)
 def create_category(category: CategoryCreate, db: Session = Depends(get_db)):
+    print(category)
     # Encode the description before saving
     category_data = category.dict()
-    category_data['description'] = encode_description(category_data.get('description'))
-    
+    #category_data['description'] = encode_description(category_data.get('description'))
+    print(category_data)
     db_category = Category(**category_data)
     db.add(db_category)
     db.commit()
@@ -39,8 +40,8 @@ def update_category(category_id: int, category: CategoryCreate, db: Session = De
         raise HTTPException(status_code=404, detail="Category not found")
     
     # Encode the description before updating
-    update_data = category.dict()
-    update_data['description'] = encode_description(update_data.get('description'))
+    update_data = category.dict(exclude_unset=True)
+   # update_data['description'] = encode_description(update_data.get('description'))
     
     for key, value in update_data.items():
         setattr(db_category, key, value)
