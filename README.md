@@ -2,29 +2,6 @@
 
 A RESTful API service built with FastAPI for managing products, categories, and product images. The application uses MySQL as the database and Docker for containerization.
 
-## Project Structure 
-
-project/
-├── app/
-│ ├── init.py
-│ ├── main.py # FastAPI application entry point
-│ ├── database.py # Database connection configuration
-│ ├── models/ # SQLAlchemy models
-│ │ ├── category.py
-│ │ ├── product.py
-│ │ └── product_image.py
-│ ├── routes/ # API endpoints
-│ │ ├── category_routes.py
-│ │ ├── product_routes.py
-│ │ └── product_image_routes.py
-│ └── schemas/ # Pydantic models for request/response
-│ ├── category.py
-│ ├── product.py
-│ └── product_image.py
-├── requirements.txt # Python dependencies
-├── Dockerfile # Docker configuration
-└── docker-compose.yml # Docker Compose configuration
-
 
 ## Prerequisites
 
