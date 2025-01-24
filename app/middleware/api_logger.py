@@ -9,8 +9,13 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
 from starlette.datastructures import Headers
 
+exclude_paths = ["/", "/docs", "/openapi.json"]
 class APILoggerMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
+       
+        # Skip logging for root endpoint
+        if request.url.path in exclude_paths:
+            return await call_next(request)
         # Start timing the request
         start_time = time.time()
         
@@ -36,9 +41,6 @@ class APILoggerMiddleware(BaseHTTPMiddleware):
             ip_address=request.client.host,
             user_agent=request.headers.get("user-agent"),
         )
-        
-        # Try to get user_id from request state (assuming authentication middleware sets this)
-        #log_entry.user_id = getattr(request.state, "user_id", None)
         
         # Log request headers
         try:
@@ -70,7 +72,7 @@ class APILoggerMiddleware(BaseHTTPMiddleware):
                 
                 # Combine chunks
                 full_body = b''.join(response_body)
-                
+              
                 # Try to parse response body as JSON
                 try:
                     log_entry.response_body = json.loads(full_body)
@@ -111,4 +113,4 @@ class APILoggerMiddleware(BaseHTTPMiddleware):
             finally:
                 db.close()
         
-        return response 
+        return response
