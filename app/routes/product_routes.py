@@ -11,10 +11,10 @@ from app.database import get_db
 # Import Product model
 from app.models.product import Product
 # Import Product-related schemas
-from app.schemas.product import ProductCreate, Product as ProductSchema, ProductBulkUpdate
+from app.schemas.product import ProductCreate, ProductUpdate, Product as ProductSchema, ProductBulkUpdate
 # Import text processor utility
 from app.utils.text_processor import encode_description
-
+import json
 # Create API router instance
 router = APIRouter()
 
@@ -30,7 +30,11 @@ def create_product(product: ProductCreate, db: Session = Depends(get_db)):
     # Add product to database session
     db.add(db_product)
     # Commit the transaction
-    db.commit()
+    try:
+        db.commit()
+    except Exception as e:
+        print(e)
+        raise HTTPException(status_code=500, detail="Failed to create product")
     # Refresh the product instance to get updated data (like id)
     db.refresh(db_product)
     return db_product
@@ -80,17 +84,19 @@ def read_product(product_id: int, db: Session = Depends(get_db)):
 
 # Endpoint to update a single product
 @router.put("/products/{product_id}", response_model=ProductSchema)
-def update_product(product_id: int, product: ProductCreate, db: Session = Depends(get_db)):
+def update_product(product_id: int, product: ProductUpdate, db: Session = Depends(get_db)):
     # Find product in database
     db_product = db.query(Product).filter(Product.id == product_id).first()
+   
     # Raise 404 if product not found
     if db_product is None:
         raise HTTPException(status_code=404, detail="Product not found")
-    
+   
     # Encode the description before updating
     update_data = product.dict(exclude_unset=True)
-    if 'description' in update_data:
-        update_data['description'] = encode_description(update_data['description'])
+
+    #if 'description' in update_data:
+        #update_data['description'] = encode_description(update_data['description'])
     
     # Update all fields from request data
     for key, value in update_data.items():
