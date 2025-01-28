@@ -9,7 +9,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
 from starlette.datastructures import Headers
 
-exclude_paths = ["/", "/docs", "/openapi.json"]
+exclude_paths = ["/", "/docs", "/openapi.json","/favicon.ico"]
 class APILoggerMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
        

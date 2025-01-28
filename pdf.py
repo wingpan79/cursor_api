@@ -87,12 +87,12 @@ class DeliveryInvoice:
         if barcode_drawing:
             details.append(["Barcode", barcode_drawing])
 
-        details_table = Table(details, colWidths=[2*inch, 4*inch])
+        details_table = Table(details, colWidths=[3*inch, 4*inch])
         details_table.setStyle(TableStyle([
             ('BACKGROUND', (0,0), (0,-1), colors.lightgrey),
             ('GRID', (0,0), (-1,-1), 1, colors.black),
             ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),  # Vertical alignment
-            ('ALIGN', (1,-1), (1,-1), 'CENTER')  # Center align the barcode
+            ('ALIGN', (0,0), (1,-1), 'CENTER')  # Center align the barcode
         ]))
         story.append(details_table)
         story.append(Paragraph(" ", styles['Normal']))

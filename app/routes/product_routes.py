@@ -14,15 +14,17 @@ from app.models.product import Product
 from app.schemas.product import ProductCreate, ProductUpdate, Product as ProductSchema, ProductBulkUpdate
 # Import text processor utility
 from app.utils.text_processor import encode_description
-import json
 # Create API router instance
+from app.auth import get_current_active_user
+from typing import Annotated
+from app.models.user import User as UserModel
 router = APIRouter()
 
 # Endpoint to create a single product
 @router.post("/products/", response_model=ProductSchema)
 def create_product(product: ProductCreate, db: Session = Depends(get_db)):
     # Encode the description before saving
-    product_data = product.dict()
+    product_data = product.model_dump()
     product_data['description'] = encode_description(product_data.get('description'))
     
     # Create new Product instance from request data
@@ -45,7 +47,7 @@ def bulk_create_products(products: List[ProductCreate], db: Session = Depends(ge
     db_products = []
     for product in products:
         # Encode the description before saving
-        product_data = product.dict()
+        product_data = product.model_dump()
         product_data['description'] = encode_description(product_data.get('description'))
         db_product = Product(**product_data)
         db_products.append(db_product)
@@ -61,7 +63,7 @@ def bulk_create_products(products: List[ProductCreate], db: Session = Depends(ge
 
 # Endpoint to get list of products with pagination
 @router.get("/products/", response_model=List[ProductSchema])
-def read_products(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_products(current_user: Annotated[UserModel, Depends(get_current_active_user)],skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
     # Example of raw SQL query (commented out ORM version)
     #products = db.query(Product).offset(skip).limit(limit).all()
     # Execute raw SQL query
