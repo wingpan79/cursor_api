@@ -13,11 +13,10 @@ from sqlalchemy.sql import func
 from typing import Annotated
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
-from datetime import timedelta
 router = APIRouter()
 
 @router.post("/register", response_model=UserSchema)
-async def register_user(user: UserCreate, db: Session = Depends(get_db)):
+async def register_user(user: UserCreate, db: Session = Depends(get_db))->UserSchema:
     """Register a new user."""
     # Check if username already exists
     if db.query(UserModel).filter(UserModel.username == user.username).first():
@@ -43,7 +42,7 @@ async def register_user(user: UserCreate, db: Session = Depends(get_db)):
 async def login(
     form_data: UserLogin,
     db: Session = Depends(get_db)
-):
+)->Token:
     """Login user and return access token."""
     # Authenticate user
     user = auth.authenticate_user(db, form_data.username, form_data.password)
