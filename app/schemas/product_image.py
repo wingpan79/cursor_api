@@ -3,7 +3,6 @@ from typing import Optional
 from datetime import datetime
 
 class ProductImageBase(BaseModel):
-    image_path: str
     is_primary: bool = False
 
 class ProductImageCreate(ProductImageBase):

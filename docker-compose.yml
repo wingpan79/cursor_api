@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   web:
     build: .
@@ -12,6 +10,7 @@ services:
     restart: always
     volumes:
       - ./app:/code/app
+      - ./uploads:/code/uploads
     command: uvicorn app.main:app --host 0.0.0.0 --port 80 --reload
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:80/"]

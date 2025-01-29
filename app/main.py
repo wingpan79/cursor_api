@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.routes import category_routes, product_routes, product_image_routes,token_routes
 from app.middleware.api_logger import APILoggerMiddleware
+from app.static import setup_static_files
 
 
 # Create database tables
@@ -13,6 +14,8 @@ app = FastAPI()
 # Add API Logger middleware
 app.add_middleware(APILoggerMiddleware)
 
+# Setup static file serving
+setup_static_files(app)
 
 # Include routers
 app.include_router(category_routes.router, tags=["categories"])
